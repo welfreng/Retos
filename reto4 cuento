@@ -1,0 +1,31 @@
+from collections import Counter
+
+def main(lista_texto):
+       
+    lista_conteo = []
+    texto = quitarCaracteres(lista_texto)
+    
+    palabras = texto.split()
+
+    contador = Counter(palabras)
+   
+    cantidadPalabras = list(contador.most_common(20))
+
+ 
+    for i in range(len(cantidadPalabras)):
+        lista_conteo.append(list(cantidadPalabras[i]))
+    
+    print(lista_conteo)
+    return lista_conteo
+
+def quitarCaracteres(texto):
+    caracter = ['-','¿','?','.',',','¡','!',':','"','_']
+    for i in caracter:
+        texto = texto.replace(i,'')
+    texto = texto.lower()
+    
+    return texto
+    
+    
+texto = 'Et laudantium minima, ab possimus. fuga et ipsa quod. Quo omnis illo eum voluptas ipsam ut eligendi laborum nam: necessitatibus, similique; ut temporibus reiciendis et enim atque. In eligendi explicabo in sunt velit et voluptatem impedit. Rem autem quas sed ipsam galisum est tempora debitis ut enim quos qui dolores quisquam et quia voluptatem? '
+main(texto)
