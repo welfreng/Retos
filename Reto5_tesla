@@ -1,0 +1,98 @@
+#NO ELIMINAR LAS SIGUIENTES IMPORTACIONES, sirven para el funcionamiento de las librería csv y json respectivamente
+
+import json
+import csv
+import math
+"""NOTAS: 
+    - PARA ESTE RETO PUEDES PROBAR TU PROGRAMA, DANDO CLICK EN LA NAVE ESPACIAL
+    - LA CONSOLA TE DIRÁ SI TU SOLUCIÓN ES CORRECTA O NO
+    - NO olvidar evaluar tu solución
+"""
+
+
+"""Inicio espacio para programar funciones propias"""
+#En este espacio podrás programar las funciones que deseas usar en la función solución (ES OPCIONAL)
+
+
+
+"""Fin espacio para programar funciones propias"""
+
+def solucion():
+    #ESTA ES LA FUNCIÓN A LA QUE LE DEBES GARANTIZAR LOS RETORNOS REQUERIDOS EN EL ENUNCIADO.
+    with open('TESLA.csv', 'r') as archivoTesla:
+        datosArchivo = csv.reader(archivoTesla)
+        
+        #Creamos las listas para luego llenarlas
+        Date = [] #Fechas del Dato
+        Open = [] #Precio de apertura
+        High = [] #Precio mas alto
+        Low = [] #Precio mas Bajo
+        Close = [] #Precio de Cierre
+        Adj_Close = []  #Precio de cierre ajustado
+        Volume = [] #Volumen de las Accionesz0
+        
+        #Creamos las listas para guardar el archivo nuevo 
+        cmpAccion = [] #Comportamineto de las acciones
+        ajtAccion = [] #Ajustes cuadraticos de close
+        
+        #creamos las listas para el valor absoluto de 
+        valorAltoAbs = []
+                
+        #Hacemos iterados los archivos        
+        next(datosArchivo, None)   
+        for fila in datosArchivo:
+            Date.append(fila[0])
+            Open.append(float(fila[1]))
+            High.append(float(fila[2]))
+            Low.append(float(fila[3]))
+            Close.append(float(fila[4]))
+            Adj_Close.append(float(fila[5]))
+            Volume.append(float(fila[6]))
+        
+        #Recorremos las listas para luego 
+        for fila in range(len(Date)):
+            #realizamos la operacion para ver el comportamiento de la accion
+            cmp = Close[fila] - Open[fila]
+            if cmp > 0:
+                cmpAccion.append('SUBE')
+            elif cmp < 0:
+                cmpAccion.append('BAJA')
+            else:
+                cmpAccion.append('ESTABLE')
+            cmpAjtAccion = math.sqrt((Close[fila] - Adj_Close[fila])**2)
+            ajtAccion.append(cmpAjtAccion)
+            valorAltoAbs.append(abs(Low[fila] - High[fila]))
+            
+            
+        #creamos el arhivo analisis solicitado
+        with open('analisis_archivo.csv', 'w') as archivo:
+            archivo.write('Fecha\t')
+            archivo.write('Comportamiento de la accion\t')
+            archivo.write('Ajuste Cuadratico de Close\n')
+            
+            #escribimos los datos solictados
+            for fila in range(len(Date)):
+                archivo.write('%s\t' % Date[fila])
+                archivo.write('%s\t' % cmpAccion[fila])
+                archivo.write('%s\n' % ajtAccion[fila])
+            archivo.close()
+        
+        detalle ={}
+        openMasBajo = min(Open)
+        closeMasAlta = max(Close)
+        promedio = sum(Volume)/len(Volume)
+        valorGrande = max(valorAltoAbs)
+        
+        for fila in range(len(Date)):
+            if Open[fila] == openMasBajo:
+                detalle['date_lowest_open'] = Date[fila]
+                detalle['lowest_open'] = openMasBajo
+            if Close[fila] == closeMasAlta:
+                detalle['date_highest_close'] = Date[fila]
+                detalle['highest_close'] = closeMasAlta
+            detalle['mean_volume'] = promedio
+            if valorAltoAbs[fila] == valorGrande:
+                detalle['date_greatest_difference'] = Date[fila]
+                detalle['greatest_difference'] = valorGrande
+        with open('detalles.json', 'w') as archivoJson:
+            json.dump(detalle, archivoJson)
