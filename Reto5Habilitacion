@@ -1,0 +1,85 @@
+import csv
+import json
+import math
+
+#abrimos el archivo a trabajar
+archivo = open("TWITTER.csv", "r")
+
+#leemos los datos del archivo abierto
+archivoTwitter = csv.reader(archivo)
+
+#Creamos las listas a utilizar 
+Date = []
+Open =  []
+High = []
+Low = []
+Close = []
+adjClose = []
+Volume = []
+
+#creamos las listas para el nuevo archivo csv
+behaviour = []
+diference = []
+
+#hacemos iterable el documento leido 
+next(archivoTwitter, None)
+#llenamos las listas con los datos que leimos del archivo
+for fila in archivoTwitter:
+    Date.append(fila[0])
+    Open.append(float(fila[1]))
+    High.append(float(fila[2]))
+    Low.append(float(fila[3]))
+    Close.append(float(fila[4]))
+    adjClose.append(float(fila[5]))
+    Volume.append(float(fila[6]))
+    
+#Recorremos las listas creadas y llenadas anteriormente 
+longitud = len(Date)
+#inicializamos en 0 esta variable para que no se acumule
+sentinel = 0
+for fila in range(longitud):
+    sentinel = Close[fila] - Open[fila]
+    if sentinel > 0:
+        behaviour.append('SUBE')
+    elif sentinel < 0:
+        behaviour.append('BAJA')
+    else:
+        behaviour.append('ESTABLE')
+    diference.append(abs(Open[fila] - High[fila]))
+
+#creamos el archivo solicitado 
+with open('analisis_archivoHabilitacion.csv','w') as archivoNew:
+    #creamos los nombres que van en el index 
+    archivoNew.write('Fecha\t')
+    archivoNew.write('Comportamiento_de_la_accion\t')
+    archivoNew.write('Diferencia_absoluta_open-high\n')
+    #recorremos las listas para guardar los datos en el nuevo archivo
+    for fila in range(longitud):
+        archivoNew.write('%s\t'% Date[fila])
+        archivoNew.write('%s\t'% behaviour[fila])
+        archivoNew.write('%s\n'%diference[fila])
+    archivoNew.close()
+
+#creamos el diccionario 
+detalles = {}
+lowest_close = min(Close)
+highest_open = max(Open)
+mean_volume = sum(Volume)/len(Volume)
+smallest_difference = min(diference)
+
+
+for fila in range(longitud):
+    if Date[fila] == lowest_close:
+        detalles['date_lowest_close'] = Date[fila]
+        detalles['lowest_close"'] = lowest_close
+    if Open[fila] == highest_open:
+        detalles['date_highest_open'] = Date[fila]
+        detalles['highest_open'] = highest_open
+    detalles['mean_volume'] = mean_volume
+    if diference[fila] == smallest_difference:
+        detalles['date_smallest_difference'] = Date[fila]
+        detalles['smallest_difference'] = smallest_difference
+  
+#creamos el archivo json 
+with open('detallesHabilitacion.json', 'w') as archivoDetalles:
+   json.dump(detalles, archivoDetalles)
