@@ -1,0 +1,79 @@
+# -*- coding: utf-8 -*-
+"""
+Created on Sat Jun 11 10:53:17 2022
+
+@author: Compumag
+"""
+#reto Globant
+import csv
+import json
+import math
+
+def solucion():
+    datos = open('FB.csv', 'r')
+    archivoFB = csv.reader(datos)
+    Date = []
+    Open = []
+    High = []
+    Low = []
+    Close = []
+    adjClose = []
+    Volume = []
+    
+    comportamiento = []
+    puntoMedio = []
+    
+    next(archivoFB, None)
+    for fila in archivoFB:
+        Date.append(fila[0])
+        Open.append(float(fila[1]))
+        High.append(float(fila[2]))
+        Low.append(float(fila[3]))
+        Close.append(float(fila[4]))
+        adjClose.append(float(fila[5]))
+        Volume.append(float(fila[6]))
+        
+    longitud = len(Date)
+    promedio = 0
+    for fila in range(longitud):
+        promedio = (High[fila] + Low[fila])/2
+        puntoMedio.append(promedio)
+       
+        if promedio < 239:
+            comportamiento.append('MUY BAJO')
+        elif promedio >= 239 and promedio < 265:
+            comportamiento.append('BAJO')
+        elif promedio >= 265 and promedio < 291:
+            comportamiento.append('MEDIO')
+        elif promedio >= 291 and promedio < 317:
+            comportamiento.append('ALTO')
+        else:
+            comportamiento.append('MUY ALTO')
+       
+    
+    with open('analisis_archivo.csv', 'w') as analisisDatos:
+        analisisDatos.write('Fecha\t')
+        analisisDatos.write('Mean-Min-Max\t')
+        analisisDatos.write('Concepto\n')
+        for fila in range(longitud):
+            analisisDatos.write('%s\t'% Date[fila])
+            analisisDatos.write('%s\t'% puntoMedio[fila])
+            analisisDatos.write('%s\n'% comportamiento[fila])
+        analisisDatos.close()
+    
+    
+    detalles = {}
+    lowest_promo = min(puntoMedio)
+    highest_promo = max(puntoMedio)
+    for fila in range(longitud):
+        if puntoMedio[fila] == lowest_promo:
+            detalles['date_lowest_prom'] = Date[fila] 
+            detalles['lowest_prom'] = lowest_promo
+        elif puntoMedio[fila] == highest_promo:
+            detalles['date_highest_prom'] = Date[fila]
+            detalles['highest_prom'] = highest_promo
+    
+    with open('detalles.json', 'w') as archivoJason:
+        json.dump(detalles, archivoJason,indent =1)
+    
+solucion()
