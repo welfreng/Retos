@@ -1,0 +1,34 @@
+/*
+ * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
+ * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
+ */
+package com.mycompany.holamundo;
+
+/**
+ *
+ * @author Compumag
+ */
+public class RetoNotas {
+    public static void main(String[] args) {
+        
+        double[] listaNotas = new double[]{4.1, 4.8, 1.5, 2.3, 0.1, 0.9, 1.4, 1.8, 1.5, 3.0};
+        reporte(listaNotas);
+    }
+    public static double[] reporte(double[] listaNotas){
+        double promedio, suma = 0;
+        double menor,mayor;
+        menor = mayor = listaNotas[0];
+        for(int i = 0; i < listaNotas.length; i++){
+            if (listaNotas[i] < menor){
+                menor = listaNotas[i];
+            }else if (listaNotas[i] > mayor){
+                mayor = listaNotas[i];
+            }
+            suma += listaNotas[i];
+        }
+        promedio = (suma/listaNotas.length);
+        double[] resultado = new double[]{promedio, menor, mayor};
+        return resultado;
+    }
+    
+}
