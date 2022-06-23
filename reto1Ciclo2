@@ -1,0 +1,28 @@
+public class Reto1 {
+    public static void main(String[] args) {
+        int[] compra = new int[]{2700, 9500, 300, 15000, 1800, 10000, 400, 3000, 400};
+        reporte(compra);
+        
+    } 
+    public static int[] reporte(int [] compra){
+        int[] arr = new int[3];
+        int suma = 0;
+        int mayor, menor;
+        mayor = menor = compra[0];
+        for (int i =0; i<compra.length; i++){
+            suma += compra[i];
+            if (compra[i] > mayor){
+                mayor = compra[i];
+            }
+            if (compra[i] < menor){
+                menor = compra[i];
+            }
+        }
+        arr[0] = suma;
+        arr[1] = menor;
+        arr[2] = mayor;
+        return arr;
+        
+    }
+    
+}
