@@ -1,0 +1,53 @@
+/*
+ * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
+ * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
+ */
+package com.mycompany.holamundo;
+import java.lang.Math;
+import java.util.Arrays;
+
+/**
+ *
+ * @author Compumag
+ */
+public class Math {
+    public static void main(String[] args) {
+        
+       //carrera
+       int[] resultados = {18, 29, 22, 25, 16, 26, 21, 23, 20};
+       int min = Integer.MAX_VALUE;
+       int max = Integer.MIN_VALUE;
+       for(int i: resultados){
+            min = Math.min(min, i);
+            max = Math.max(max, i);
+       }
+       int sumatorias = Arrays.stream(resultados).sum()/resultados.length; //suma un array y saca el promedio
+        System.out.println(sumatorias+" .... " +max+"---"+ min);
+        
+        //notas
+        double suma = 0;
+        double[] listaNotas = {4.1, 4.8, 1.5, 2.3, 0.1, 0.9, 1.4, 1.8, 1.5, 3.0};
+        double minimo = Double.POSITIVE_INFINITY;
+        double maximo = Double.NEGATIVE_INFINITY;
+        for(double i: listaNotas){
+            minimo = Math.min(minimo, i);
+            maximo = Math.max(maximo, i);
+            suma += i; //suma tambien 
+       }
+       double sumatoria = Arrays.stream(listaNotas).sum(); //suma todo lo que hay en un array
+       System.out.println(maximo+" --- "+ minimo +" ** "+suma+" .... "+ sumatoria); 
+       
+       //tienda
+       int[] compra = new int[]{2700, 9500, 300, 15000, 1800, 10000, 400, 3000, 400};
+       int mins = Integer.MAX_VALUE;
+       int maxs = Integer.MIN_VALUE;
+       for(int i: compra){
+            mins = Math.min(mins, i);
+            maxs = Math.max(maxs, i);
+       }
+       int sum = Arrays.stream(compra).sum(); //suma un array 
+        System.out.println(sum+" .... " +maxs+"---"+ mins);
+    }
+ 
+
+}
